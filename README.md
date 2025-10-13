@@ -1,2 +1,2 @@
 # AA Protein Analyser
-Benvenuto nel mio progetto Streamlit!
+Interactive app for analyzing and comparing amino acid frequencies in UniProt (https://www.uniprot.org/) proteins
