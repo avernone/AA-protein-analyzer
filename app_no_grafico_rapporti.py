@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
 
-st.set_page_config(page_title="Amino Acid Analysis", page_icon="🧬")
+st.set_page_config(page_title="Analisi Amminoacidica", page_icon="🤞")
 
 st.title("🔬 Analisi Amminoacidica da Codice UniProt (AC)")
 
@@ -70,13 +70,6 @@ if ac:
         st.subheader("⚖️ Rapporti amminoacidici specifici")
         st.dataframe(ratio_df.set_index("Rapporto"))
 
-        # Grafico dei rapporti
-        fig2, ax2 = plt.subplots(figsize=(6, 4))
-        ax2.bar(ratio_df["Rapporto"], ratio_df["Valore"], color="orange")
-        ax2.set_ylabel("Valore del rapporto")
-        ax2.set_title("Rapporti amminoacidici (E/Q, E/P, Y/F, D/N, G/S)")
-        st.pyplot(fig2)
-
         # --- 📥 Sezione per scaricare i dati in Excel ---
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
@@ -86,16 +79,11 @@ if ac:
             img_data = BytesIO()
             fig.savefig(img_data, format='png', bbox_inches='tight')
             img_data.seek(0)
-            img_data2 = BytesIO()
-            fig2.savefig(img_data2, format='png', bbox_inches='tight')
-            img_data2.seek(0)
 
             workbook = writer.book
+            worksheet = workbook.create_sheet("Grafico")
             from openpyxl.drawing.image import Image
-            worksheet1 = workbook.create_sheet("Grafico_Frequenze")
-            worksheet1.add_image(Image(img_data), "A1")
-            worksheet2 = workbook.create_sheet("Grafico_Rapporti")
-            worksheet2.add_image(Image(img_data2), "A1")
+            worksheet.add_image(Image(img_data), "A1")
 
         output.seek(0)
 
@@ -108,3 +96,4 @@ if ac:
 
     else:
         st.error("❌ Codice UniProt non valido o sequenza non trovata.")
+
